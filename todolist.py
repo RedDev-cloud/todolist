@@ -26,20 +26,20 @@ def load_todos(list_name):
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
     
-def error_1(choise):
+def error_1(choice):
     print("")
     print(">>>")
     print("   Error_1:")
-    print(f"   Die Auswahlmöglichkeit ({choise}) gibt es nicht!")
+    print(f"   Die Auswahlmöglichkeit ({choice}) gibt es nicht!")
     print(">>>")
     print("")
     input("Zum fortfahren Enter drücken: ")
 
-def error_2(choise):
+def error_2(choice):
     print("")
     print(">>>")
     print("   Error_2:")
-    print(f"   Die Eingabe ({choise}) ist keine Zahl!")
+    print(f"   Die Eingabe ({choice}) ist keine Zahl!")
     print(">>>")
     print("")
     input("Zum fortfahren Enter drücken: ")
@@ -138,8 +138,8 @@ while True:
                 print(f"{i}. {todo}")
 
             try:
-                choise = (input("> Gib die Nummer ein: "))
-                num = int(choise)
+                choice = (input("> Gib die Nummer ein: "))
+                num = int(choice)
                 if 1 <= num <= len(todos):
                     entfernt = todos.pop(num - 1)
                     save_todos(todos, todolist)
@@ -150,7 +150,7 @@ while True:
                 else:
                     error_1(num)
             except ValueError:
-                error_2(choise)
+                error_2(choice)
 
         elif newitem_or_read == "4":
             if todos:
