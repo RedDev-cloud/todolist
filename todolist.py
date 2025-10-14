@@ -1,9 +1,3 @@
-print("----------------")
-print("    Todolist   ")
-print(" Python Edition")
-print("----------------")
-print("")
-
 import json
 import os
 
