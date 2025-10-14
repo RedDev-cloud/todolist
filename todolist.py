@@ -208,22 +208,22 @@ while True:
                             print(f"{i}. {name}")
 
                         print("")
-                        Auswahl = input("> Gib die Nummer ein: ").strip()
+                        choice = input("> Gib die Nummer ein: ").strip()
 
-                        if not Auswahl.isdigit():
-                            error_2(Auswahl)
+                        if not choice.isdigit():
+                            error_2(choice)
                             continue
 
-                        Auswahl = int(Auswahl)
+                        choice = int(choice)
 
                         # Prüfen, ob Zahl im gültigen Bereich liegt
-                        if 1 <= Auswahl <= len(listen_namen):
-                            todolist = listen_namen[Auswahl - 1]
+                        if 1 <= choice <= len(listen_namen):
+                            todolist = listen_namen[choice - 1]
                             todos = load_todos(todolist)
                             print("")
                             print(f"Todoliste '{todolist}' wurde geöffnet!")
                         else:
-                            error_1(Auswahl)
+                            error_1(choice)
 
                     else:
                         error_5()
@@ -246,15 +246,15 @@ while True:
                     print(f"{i}. {name}")
 
                 print("")
-                Auswahl = input("> Gib die Nummer ein: ").strip()
+                choice = input("> Gib die Nummer ein: ").strip()
 
-                if not Auswahl.isdigit():
-                    error_2(Auswahl)
+                if not choice.isdigit():
+                    error_2(choice)
                     continue
 
-                Auswahl = int(Auswahl)
-                if 1 <= Auswahl <= len(listen_namen):
-                    list_name = listen_namen[Auswahl - 1]
+                choice = int(choice)
+                if 1 <= choice <= len(listen_namen):
+                    list_name = listen_namen[choice - 1]
                     print("")
                     print(f"Möchtest du '{list_name}' wirklich löschen?")
                     print("Tippe:")
@@ -280,11 +280,47 @@ while True:
                     else:
                         error_1(confirm)
                 else:
-                    error_1(Auswahl)
+                    error_1(choice)
 
             except (FileNotFoundError, json.JSONDecodeError):
                 error_6()
 
+        elif newitem_or_read == "4":
+            try:    
+                with open("todos.json", "r", encoding="utf-8") as f:
+                    data = json.load(f)
+
+                if not data:
+                    error_5()
+                    continue
+
+                print("")
+                print("Möchtest du wirklich alle Todolisten löschen?")
+                print("Tippe:")
+                print("      1 - Fortfahren")
+                print("      2 - Abbrechen")
+                confirm = input("> ").strip()
+
+                if confirm == "1":
+                    data = {}
+                    with open("todos.json", "w", encoding="utf-8") as f:
+                        json.dump(data, f, indent=4, ensure_ascii=False)
+                    print("")
+                    print("Alle Todolisten wurden gelöscht!")
+                    print("")
+                    input("Zum fortfahren Enter drücken: ")
+
+                elif confirm == "2":
+                    print("")
+                    print("Löschen abgebrochen.")
+                    print("")
+                    input("Zum fortfahren Enter drücken: ")
+
+                else:
+                    error_1(confirm)
+
+            except (FileNotFoundError, json.JSONDecodeError):
+                error_6()            
 
         elif newitem_or_read in ("5", "6"):
             break
