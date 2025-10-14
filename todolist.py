@@ -138,8 +138,8 @@ while True:
                 print(f"{i}. {todo}")
 
             try:
-                Auswahl = (input("> Gib die Nummer ein: "))
-                num = int(Auswahl)
+                choise = (input("> Gib die Nummer ein: "))
+                num = int(choise)
                 if 1 <= num <= len(todos):
                     entfernt = todos.pop(num - 1)
                     save_todos(todos, todolist)
@@ -150,7 +150,7 @@ while True:
                 else:
                     error_1(num)
             except ValueError:
-                error_2(Auswahl)
+                error_2(choise)
 
         elif newitem_or_read == "4":
             if todos:
@@ -158,22 +158,22 @@ while True:
                 print("Tippe:")
                 print("      1 - Fortfahren")
                 print("      2 - Abbrechen")
-                question = input("> ")
+                confirm = input("> ")
         
-                if question == "1":
+                if confirm == "1":
                     todos.clear()
                     save_todos(todos, todolist)
                     print("")
                     print("Alle Todos wurden gelöscht.")
                     print("")
                     input("Zum fortfahren Enter drücken: ")
-                elif question == "2":
+                elif confirm == "2":
                     print("")
                     print("Abgebrochen")
                     print("")
                     input("Zum fortfahren Enter drücken: ")
                 else:
-                    error_1(question)
+                    error_1(confirm)
             else:
                 error_3()
 
