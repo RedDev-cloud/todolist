@@ -26,20 +26,20 @@ def load_todos(list_name):
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
     
-def error_1(Auswahl):
+def error_1(choise):
     print("")
     print(">>>")
     print("   Error_1:")
-    print(f"   Die Auswahlmöglichkeit ({Auswahl}) gibt es nicht!")
+    print(f"   Die Auswahlmöglichkeit ({choise}) gibt es nicht!")
     print(">>>")
     print("")
     input("Zum fortfahren Enter drücken: ")
 
-def error_2(Auswahl):
+def error_2(choise):
     print("")
     print(">>>")
     print("   Error_2:")
-    print(f"   Die Eingabe ({Auswahl}) ist keine Zahl!")
+    print(f"   Die Eingabe ({choise}) ist keine Zahl!")
     print(">>>")
     print("")
     input("Zum fortfahren Enter drücken: ")
@@ -65,7 +65,7 @@ def error_4():
 def error_5():
     print("")
     print(">>>")
-    print("   Error_4:")
+    print("   Error_5:")
     print("   Es wurden keine Todolisten in todos.json gefunden!")
     print(">>>")
     print("")
@@ -74,7 +74,7 @@ def error_5():
 def error_6():
     print("")
     print(">>>")
-    print("   Error_4:")
+    print("   Error_6:")
     print("   todos.json konnte nicht geladen werden!")
     print(">>>")
     print("")
