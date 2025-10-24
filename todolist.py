@@ -150,7 +150,7 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 
-def language_choice():
+def language_choice(first_choice):
     global language
     loop = True
     if not language:
@@ -159,14 +159,17 @@ def language_choice():
     print(t("choose_option"))
     print("      1 - English")
     print("      2 - Deutsch")
-    print("      3" + t("cancel"))
+
+    if not first_choice:
+        print("      3" + t("cancel"))
+    
     choice = input("> ").strip()
 
     if choice == "1":
         language = "English"
     elif choice == "2":
         language = "Deutsch"
-    elif choice == "3":
+    elif choice == "3" and not first_choice:
         return loop
     else:
         error(1, choice)
@@ -195,7 +198,7 @@ language = load_setting("<language>")
 if not language:
     while True:
         clear_screen()
-        loop = language_choice()
+        loop = language_choice(True)
         if not loop:
             break
 
@@ -315,7 +318,15 @@ while True:
                 with open("todos.json", "r", encoding="utf-8") as f:
                     data = json.load(f)
 
-                if data:
+                if len(data) == 1:
+                    todolist = list(data.keys())[0]
+                    todos = load_todos(todolist)
+                    print(t("todolist_opened", name=todolist))
+                    input(t("press_enter"))
+
+                    
+
+                elif data:
                     print("Welche Todoliste möchtest du öffnen?")
                     listen_namen = list(data.keys())
                     for i, name in enumerate(listen_namen, start=1):
@@ -410,7 +421,7 @@ while True:
                 error(6, choice)
 
         elif choice == "5":
-            language_choice()
+            language_choice(False)
 
         elif choice == "6":
             break
