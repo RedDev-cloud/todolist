@@ -16,7 +16,9 @@ translations = {
         "todolist_opened": "Todoliste '{name}' wurde geöffnet!",
         "todolist_deleted": "Todoliste '{name}' wurde gelöscht!",
         "todolist_name": "Wie soll die Todoliste heißen?",
-        "enter_number": "Gib die Nummer ein:",
+        "choose_todolist": "Welche Todolist möchtest du öffnen?",
+        "choose_delete_todolist": "Welche Todoliste möchtest du löschen?",
+        "todo_delete": "Welches todo möchtest du löschen?",
         "confirm_delete": "Möchtest du '{name}' wirklich löschen?",
         "confirm_all_delete": "Möchtest du wirklich alle Todolisten löschen?",
         "continue": "1 - Fortfahren",
@@ -63,9 +65,11 @@ translations = {
         "deleted_all": "All todolists were deleted!",
         "no_todolists": "No todolists were found!",
         "todolist_opened": "Todolist '{name}' has been opened!",
+        "choose_todolist": "Which todolist would you like to open?",
+        "choose_delete_todolist": "Which Todolist would you like to delete?",
         "todolist_deleted": "Todolist '{name}' has been deleted!",
         "todolist_name": "What should the todolist be called?",
-        "enter_number": "Enter the number:",
+        "todo_delete": "Which todo would you like to delete?",
         "confirm_delete": "Do you really want to delete '{name}'?",
         "confirm_all_delete": "Do you really want to delete all todolists?",
         "continue": "1 - Continue",
@@ -232,7 +236,8 @@ while True:
     # =======================
     if todolist:
         if choice == "1":
-            newitem = input(t("enter_todo") + " ").strip()
+            print(t("enter_todo"))
+            newitem = input("> ").strip()
             if not newitem:
                 error(4, choice)
             else:
@@ -254,7 +259,7 @@ while True:
                 error(3, choice)
                 continue
 
-            print(t("enter_number"))
+            print(t("todo_delete"))
             for i, todo in enumerate(todos, start=1):
                 print(f"{i}. {todo}")
             choice_num = input("> ").strip()
@@ -327,7 +332,7 @@ while True:
                     
 
                 elif data:
-                    print("Welche Todoliste möchtest du öffnen?")
+                    print(t("choose_todolist"))
                     listen_namen = list(data.keys())
                     for i, name in enumerate(listen_namen, start=1):
                         print(f"{i}. {name}")
@@ -358,7 +363,7 @@ while True:
                     error(5, choice)
                     continue
 
-                print("Welche Todoliste möchtest du löschen?")
+                print(t("choose_delete_todolist"))
                 listen_namen = list(data.keys())
                 for i, name in enumerate(listen_namen, start=1):
                     print(f"{i}. {name}")
