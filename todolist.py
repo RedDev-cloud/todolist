@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 # =======================
 # Übersetzungs-System
@@ -16,9 +17,10 @@ translations = {
         "todolist_opened": "Todoliste '{name}' wurde geöffnet!",
         "todolist_deleted": "Todoliste '{name}' wurde gelöscht!",
         "todolist_name": "Wie soll die Todoliste heißen?",
-        "choose_todolist": "Welche Todolist möchtest du öffnen?",
+        "choose_todolist": "Welche Todoliste möchtest du öffnen?",
         "choose_delete_todolist": "Welche Todoliste möchtest du löschen?",
-        "todo_delete": "Welches todo möchtest du löschen?",
+        "todo_delete": "Welches Todo möchtest du löschen?",
+        "todo_toggle": "Welches Todo möchtest du (ent-)abhaken?",
         "confirm_delete": "Möchtest du '{name}' wirklich löschen?",
         "confirm_all_delete": "Möchtest du wirklich alle Todolisten löschen?",
         "continue": "1 - Fortfahren",
@@ -33,14 +35,21 @@ translations = {
         "menu_change_lang": "5 - Sprache ändern",
         "menu_exit": "6 - Programm beenden",
 
+        # Einstellungen-Menü
+        "menu_settings": "5 - Einstellungen ändern",
+        "menu_change_coldown": "2 - Countdown-Zeit ändern",
+        "menu_close_settings": "3 - Einstellungen schließen",
+        "menu_exit_settings": "4 - Programm beenden",
+        "menu_coldown": "Gib die neue Countdown-Zeit ein (in Sekunden):",
+
         # Todolisten-Menü
-        "menu_todo": "Tippe:",
         "menu_add": "1 - Ein Todo hinzufügen",
         "menu_show": "2 - Alle Todos anzeigen",
-        "menu_remove": "3 - Ein Todo löschen",
-        "menu_clear": "4 - Alle Todos löschen",
-        "menu_close": "5 - Todoliste schließen",
-        "menu_exit_todo": "6 - Programm beenden",
+        "menu_check": "3 - Ein Todo abhaken/entabhaken",
+        "menu_remove": "4 - Ein Todo löschen",
+        "menu_clear": "5 - Alle Todos löschen",
+        "menu_close": "6 - Todoliste schließen",
+        "menu_exit_todo": "7 - Programm beenden",
 
         "enter_todo": "Was möchtest du hinzufügen?",
         "todos_empty": "Du hast keine Todos!",
@@ -54,7 +63,7 @@ translations = {
         "error_3": "Du hast keine Todos!",
         "error_4": "Leere Eingaben sind nicht erlaubt!",
         "error_5": "Es wurden keine Todolisten in todos.json gefunden!",
-        "error_6": "todos.json konnte nicht geladen werden!"
+        "error_6": "todos.json konnte nicht geladen werden!",   
     },
     "English": {
         # General texts
@@ -70,6 +79,7 @@ translations = {
         "todolist_deleted": "Todolist '{name}' has been deleted!",
         "todolist_name": "What should the todolist be called?",
         "todo_delete": "Which todo would you like to delete?",
+        "todo_toggle": "Which todo would you like to (un)check?",
         "confirm_delete": "Do you really want to delete '{name}'?",
         "confirm_all_delete": "Do you really want to delete all todolists?",
         "continue": "1 - Continue",
@@ -81,22 +91,30 @@ translations = {
         "menu_open": "2 - Open a todolist",
         "menu_delete": "3 - Delete a todolist",
         "menu_delete_all": "4 - Delete all todolists",
-        "menu_change_lang": "5 - Change language",
+        "menu_settings": "5 - Change settings",
         "menu_exit": "6 - Exit program",
 
         # Todo menu
-        "menu_todo": "Type:",
         "menu_add": "1 - Add a todo",
         "menu_show": "2 - Show all todos",
-        "menu_remove": "3 - Remove a todo",
-        "menu_clear": "4 - Delete all todos",
-        "menu_close": "5 - Close todolist",
-        "menu_exit_todo": "6 - Exit program",
+        "menu_check": "3 - Check/uncheck a todo",
+        "menu_remove": "4 - Remove a todo",
+        "menu_clear": "5 - Delete all todos",
+        "menu_close": "6 - Close todolist",
+        "menu_exit_todo": "7 - Exit program",
 
         "enter_todo": "What do you want to add?",
         "todos_empty": "You have no todos!",
         "todo_deleted": "\"{item}\" has been deleted!",
         "all_todos_deleted": "All todos have been deleted.",
+
+        # Settings menu
+        "menu_change_lang": "1 - Change language",
+        "menu_change_coldown": "2 - Change countdown timer",
+        "menu_close_settings": "3 - Exit settings",
+        "menu_exit_settings": "4 - Exit program", 
+
+        "menu_coldown": "Enter the new countdown time (in seconds):",
 
         # Errors
         "error_header": "Error_{code}:",
@@ -114,7 +132,6 @@ translations = {
 # =======================
 
 def t(key, **kwargs):
-    """Gibt die Übersetzung für den aktuellen Schlüssel zurück."""
     text = translations.get(language, {}).get(key, key)
     return text.format(**kwargs) if isinstance(text, str) else key
 
@@ -183,7 +200,6 @@ def language_choice(first_choice):
 
 
 def error(code, choice=None):
-    """Zeigt einen Fehlertext aus dem Wörterbuch an."""
     print("\n>>>")
     print(f"   {t('error_header', code=code)}")
     print(f"   {t(f'error_{code}', choice=choice)}")
@@ -196,8 +212,10 @@ def error(code, choice=None):
 # Hauptprogramm
 # =======================
 todolist = False
+settings_menu = False
 todos = []
 language = load_setting("<language>")
+coldown = load_setting("<coldown>")
  
 if not language:
     while True:
@@ -206,19 +224,29 @@ if not language:
         if not loop:
             break
 
+if not coldown:
+    coldown = 0.5
 
 while True:
     clear_screen()
-    # Menü anzeigen
     if todolist:
         print(f"Todoliste: {todolist}\n")
-        print(t("menu_todo"))
+        print(t("menu_main"))
         print("      " + t("menu_add"))
         print("      " + t("menu_show"))
+        print("      " + t("menu_check"))
         print("      " + t("menu_remove"))
         print("      " + t("menu_clear"))
         print("      " + t("menu_close"))
         print("      " + t("menu_exit_todo"))
+
+    elif settings_menu == True:
+        print(t("menu_main"))
+        print("      " + t("menu_change_lang"))
+        print("      " + t("menu_change_coldown"))
+        print("      " + t("menu_close_settings"))
+        print("      " + t("menu_exit_settings"))
+
     else:
         print(t("menu_main"))
         print("      " + t("menu_create"))
@@ -232,7 +260,7 @@ while True:
     clear_screen()
 
     # =======================
-    # Todolisten-Modus
+    # Todolisten-Menü
     # =======================
     if todolist:
         if choice == "1":
@@ -255,29 +283,56 @@ while True:
                 error(3, choice)
 
         elif choice == "3":
+            # ✅ Neues Abhaken mit Speichern & Toggle
+            if todos:
+                print("Todos:")
+                for i, todo in enumerate(todos, start=1):
+                    print(f"      {i}. {todo}")
+                print("")
+                print(t("todo_toggle"))
+                choice_num = input("> ").strip()
+
+                if not choice_num.isdigit():
+                    error(2, choice_num)
+                    continue
+
+                num = int(choice_num)
+                if 1 <= num <= len(todos):
+                    current_todo = todos[num - 1]
+                    if current_todo.startswith("[x] "):
+                        todos[num - 1] = current_todo[4:]
+                        print(f'"{current_todo[4:]}" wurde wieder geöffnet.')
+                    else:
+                        todos[num - 1] = f"[x] {current_todo}"
+                        print(f'"{current_todo}" wurde abgehakt.')
+                    save_todos(todos, todolist, "todos.json")
+                    time.sleep(coldown)
+                else:
+                    error(1, num)
+            else:
+                error(3, choice)
+
+        elif choice == "4":
             if not todos:
                 error(3, choice)
                 continue
-
             print(t("todo_delete"))
             for i, todo in enumerate(todos, start=1):
                 print(f"{i}. {todo}")
             choice_num = input("> ").strip()
-
             if not choice_num.isdigit():
                 error(2, choice_num)
                 continue
-
             num = int(choice_num)
             if 1 <= num <= len(todos):
                 removed = todos.pop(num - 1)
                 save_todos(todos, todolist, "todos.json")
                 print(t("todo_deleted", item=removed))
-                input(t("press_enter"))
+                time.sleep(coldown)
             else:
                 error(1, num)
 
-        elif choice == "4":
+        elif choice == "5":
             if todos:
                 print(t("confirm_all_delete"))
                 print(t("continue"))
@@ -287,20 +342,46 @@ while True:
                     todos.clear()
                     save_todos(todos, todolist, "todos.json")
                     print(t("all_todos_deleted"))
-                    input(t("press_enter"))
+                    time.sleep(coldown)
                 elif confirm == "2":
                     print(t("aborted"))
-                    input(t("press_enter"))
+                    time.sleep(coldown)
                 else:
                     error(1, confirm)
             else:
                 error(3, choice)
 
-        elif choice == "5":
+        elif choice == "6":
             todolist = False
             todos = []
 
-        elif choice == "6":
+        elif choice == "7":
+            break
+
+        else:
+            error(1, choice)
+
+    # =======================
+    # Einstellungen-Menü
+    # =======================
+    elif settings_menu == True:
+        if choice == "1":
+            language_choice(False)
+
+        elif choice == "2":
+            print(t("menu_coldown"))
+            eingabe = input("> ")
+
+            try:
+                coldown = float(eingabe)
+                save_todos(coldown, "<coldown>", "settings.json")
+            except ValueError:
+                error(2, eingabe)
+
+        elif choice == "3":
+            settings_menu = False
+
+        elif choice == "4":
             break
 
         else:
@@ -322,26 +403,20 @@ while True:
             try:
                 with open("todos.json", "r", encoding="utf-8") as f:
                     data = json.load(f)
-
                 if len(data) == 1:
                     todolist = list(data.keys())[0]
                     todos = load_todos(todolist)
                     print(t("todolist_opened", name=todolist))
-                    input(t("press_enter"))
-
-                    
-
+                    time.sleep(coldown)
                 elif data:
                     print(t("choose_todolist"))
                     listen_namen = list(data.keys())
                     for i, name in enumerate(listen_namen, start=1):
                         print(f"{i}. {name}")
-
                     choice_open = input("> ").strip()
                     if not choice_open.isdigit():
                         error(2, choice_open)
                         continue
-
                     idx = int(choice_open)
                     if 1 <= idx <= len(listen_namen):
                         todolist = listen_namen[idx - 1]
@@ -350,7 +425,6 @@ while True:
                         error(1, choice_open)
                 else:
                     error(5, choice)
-
             except (FileNotFoundError, json.JSONDecodeError):
                 error(6, choice)
 
@@ -358,21 +432,17 @@ while True:
             try:
                 with open("todos.json", "r", encoding="utf-8") as f:
                     data = json.load(f)
-
                 if not data:
                     error(5, choice)
                     continue
-
                 print(t("choose_delete_todolist"))
                 listen_namen = list(data.keys())
                 for i, name in enumerate(listen_namen, start=1):
                     print(f"{i}. {name}")
-
                 choice_delete = input("> ").strip()
                 if not choice_delete.isdigit():
                     error(2, choice_delete)
                     continue
-
                 idx = int(choice_delete)
                 if 1 <= idx <= len(listen_namen):
                     list_name = listen_namen[idx - 1]
@@ -380,21 +450,19 @@ while True:
                     print(t("continue"))
                     print("2" + t("cancel"))
                     confirm = input("> ").strip()
-
                     if confirm == "1":
                         del data[list_name]
                         with open("todos.json", "w", encoding="utf-8") as f:
                             json.dump(data, f, indent=4, ensure_ascii=False)
                         print(t("todolist_deleted", name=list_name))
-                        input(t("press_enter"))
+                        time.sleep(coldown)
                     elif confirm == "2":
                         print(t("aborted"))
-                        input(t("press_enter"))
+                        time.sleep(coldown)
                     else:
                         error(1, confirm)
                 else:
                     error(1, choice_delete)
-
             except (FileNotFoundError, json.JSONDecodeError):
                 error(6, choice)
 
@@ -405,28 +473,25 @@ while True:
                 if not data:
                     error(5, choice)
                     continue
-
                 print(t("confirm_all_delete"))
                 print(t("continue"))
                 print("2" + t("cancel"))
                 confirm = input("> ").strip()
-
                 if confirm == "1":
                     with open("todos.json", "w", encoding="utf-8") as f:
                         json.dump({}, f, indent=4, ensure_ascii=False)
                     print(t("deleted_all"))
-                    input(t("press_enter"))
+                    time.sleep(coldown)
                 elif confirm == "2":
                     print(t("aborted"))
-                    input(t("press_enter"))
+                    time.sleep(coldown)
                 else:
                     error(1, confirm)
-
             except (FileNotFoundError, json.JSONDecodeError):
                 error(6, choice)
 
         elif choice == "5":
-            language_choice(False)
+            settings_menu = True
 
         elif choice == "6":
             break
