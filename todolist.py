@@ -32,14 +32,15 @@ translations = {
         "menu_open": "2 - Eine Todoliste öffnen",
         "menu_delete": "3 - Eine Todoliste löschen",
         "menu_delete_all": "4 - Alle Todolisten löschen",
-        "menu_change_lang": "5 - Sprache ändern",
+        "menu_settings": "5 - Einstellungen",
         "menu_exit": "6 - Programm beenden",
 
         # Einstellungen-Menü
-        "menu_settings": "5 - Einstellungen ändern",
+        "menu_change_lang": "1 - Sprache ändern",
         "menu_change_coldown": "2 - Countdown-Zeit ändern",
         "menu_close_settings": "3 - Einstellungen schließen",
         "menu_exit_settings": "4 - Programm beenden",
+
         "menu_coldown": "Gib die neue Countdown-Zeit ein (in Sekunden):",
 
         # Todolisten-Menü
@@ -253,7 +254,7 @@ while True:
         print("      " + t("menu_open"))
         print("      " + t("menu_delete"))
         print("      " + t("menu_delete_all"))
-        print("      " + t("menu_change_lang"))
+        print("      " + t("menu_settings"))
         print("      " + t("menu_exit"))
 
     choice = input("> ").strip()
