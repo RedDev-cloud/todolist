@@ -13,15 +13,11 @@ Create, manage, and save multiple todo lists — stored neatly in a `todos.json`
 📝 Add, view, delete, clear, or **check/uncheck** todos  
 📅 **Date tracking** for every todo (automatically saved)  
 🎨 Improved todo display with **colored date output** in the terminal  
-📅 **Date tracking** for every todo (automatically saved)  
-🎨 Improved todo display with **colored date output** in the terminal  
 🔁 Todo check/uncheck system with **automatic JSON saving**  
 ⚙️ **Settings menu** to change app language & countdown timer  
 💾 **Persistent storage** (`todos.json` + `settings.json`)  
 ⏱️ Adjustable **countdown delay** for UI feedback  
 🖥️ Clean and user-friendly terminal interface  
-⚠️ Comprehensive **error handling system**  
-🔄 **Backward compatible** with old todos (todos without dates show `--.--.----`)
 ⚠️ Comprehensive **error handling system**  
 🔄 **Backward compatible** with old todos (todos without dates show `--.--.----`)
 
