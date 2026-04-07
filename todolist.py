@@ -31,6 +31,8 @@ translations = {
         "confirm_all_delete": "Möchtest du wirklich alle Todolisten löschen?",
         "continue": "1 - Fortfahren",
         "cancel": " - Abbrechen",
+        "yes": "1 - Ja",
+        "no": "2 - Nein",
         # Hauptmenü
         "menu_main": "Tippe:",
         "menu_create": "1 - Eine Todoliste erstellen",
@@ -42,9 +44,12 @@ translations = {
         # Einstellungen-Menü
         "menu_change_lang": "1 - Sprache ändern",
         "menu_change_coldown": "2 - Countdown-Zeit ändern",
-        "menu_close_settings": "3 - Einstellungen schließen",
-        "menu_exit_settings": "4 - Programm beenden",
+        "menu_auto_open": "3 - Neu erstellte Todolisten automatisch öffnen",
+        "menu_close_settings": "4 - Einstellungen schließen",
+        "menu_exit_settings": "5 - Programm beenden",
         "menu_coldown": "Gib die neue Countdown-Zeit ein (in Sekunden):",
+        "menu_auto_open_enabled": "Soll das automatische Öffnen neuer Todolisten aktiviert werden?",
+        "menu_auto_open_disabled": "Soll das automatische Öffnen neuer Todolisten deaktiviert werden?",
         # Todolisten-Menü
         "menu_add": "1 - Ein Todo hinzufügen",
         "menu_show": "2 - Alle Todos anzeigen",
@@ -85,6 +90,8 @@ translations = {
         "confirm_all_delete": "Do you really want to delete all todolists?",
         "continue": "1 - Continue",
         "cancel": " - Cancel",
+        "yes": "1 - Yes",
+        "no": "2 - No",
         # Main menu
         "menu_main": "Type:",
         "menu_create": "1 - Create a todolist",
@@ -108,9 +115,12 @@ translations = {
         # Settings menu
         "menu_change_lang": "1 - Change language",
         "menu_change_coldown": "2 - Change countdown timer",
-        "menu_close_settings": "3 - Exit settings",
-        "menu_exit_settings": "4 - Exit program",
+        "menu_auto_open": "3 - Automatically open newly created todolists",
+        "menu_close_settings": "4 - Exit settings",
+        "menu_exit_settings": "5 - Exit program",
         "menu_coldown": "Enter the new countdown time (in seconds):",
+        "menu_auto_open_enabled": "Should the automatic opening of new todolists be enabled?",
+        "menu_auto_open_disabled": "Should the automatic opening of new todolists be disabled?",
         # Errors
         "error_header": "Error_{code}:",
         "error_1": "The option ({choice}) is not available!",
@@ -232,6 +242,7 @@ settings_menu = False
 todos = []
 language = load_setting("<language>")
 coldown = load_setting("<coldown>")
+auto_open = load_setting("<auto_open>")
 
 if not language:
     while True:
@@ -242,6 +253,9 @@ if not language:
 
 if not coldown:
     coldown = 0.5
+
+if not auto_open:
+    auto_open = True
 
 while True:
     clear_screen()
@@ -259,6 +273,7 @@ while True:
         print(t("menu_main"))
         print(" " + t("menu_change_lang"))
         print(" " + t("menu_change_coldown"))
+        print(" " + t("menu_auto_open"))
         print(" " + t("menu_close_settings"))
         print(" " + t("menu_exit_settings"))
     else:
@@ -395,8 +410,21 @@ while True:
             except ValueError:
                 error(2, eingabe)
         elif choice == "3":
-            settings_menu = False
+            if auto_open:
+                print(t("menu_auto_open_disabled"))
+                print(t("yes") + "   " + t("no"))
+                yes_no = input("> ").strip()
+                if yes_no == "1":
+                    auto_open = False
+            else:
+                print(t("menu_auto_open_enabled"))
+                print(t("yes") + "   " + t("no"))
+                yes_no = input("> ").strip()
+                if yes_no == "1":
+                    auto_open = True   
         elif choice == "4":
+            settings_menu = False
+        elif choice == "5":
             break
         else:
             error(1, choice)
@@ -414,6 +442,13 @@ while True:
             else:
                 # initial leer: neue Liste als leere Liste (künftig Dict-Objekte)
                 save_todos([], newitem, "todos.json")
+
+                if auto_open:
+                    todolist = newitem
+                    print(t("todolist_opened", name=todolist))
+                    time.sleep(coldown)
+                
+                
 
         # 2 - Open a todolist
         elif choice == "2":
