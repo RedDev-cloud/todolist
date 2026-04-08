@@ -1,5 +1,5 @@
 # 🧾 Todo List Manager (Python)
-[![Python](https://img.shields.io/badge/Python-3.13.7-blue?logo=python&logoColor=white)](https://www.python.org/) [![Version](https://img.shields.io/badge/Version-2.6.0-orange)]() [![License](https://img.shields.io/badge/License-MIT-green)](https://opensource.org/licenses/MIT) [![Languages](https://img.shields.io/badge/Languages-English%20%7C%20German-blue)]()
+[![Python](https://img.shields.io/badge/Python-3.13.7-blue?logo=python&logoColor=white)](https://www.python.org/) [![Version](https://img.shields.io/badge/Version-2.6.1-orange)]() [![License](https://img.shields.io/badge/License-MIT-green)](https://opensource.org/licenses/MIT) [![Languages](https://img.shields.io/badge/Languages-English%20%7C%20German-blue)]()
 
 A lightweight and easy-to-use **terminal-based Todo List Manager** built with Python.  
 Create, manage, and save multiple todo lists — stored neatly in a `todos.json` file.  
@@ -24,6 +24,9 @@ Create, manage, and save multiple todo lists — stored neatly in a `todos.json`
 ---
 
 ## 📝 Changelog
+
+### **v2.6.1**
+- feat: update confirmation messages for deleting todos in translations
 
 ### **v2.6.0**
 - feat: add auto-open feature for newly created todolists

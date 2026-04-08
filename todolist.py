@@ -29,6 +29,7 @@ translations = {
         "todo_toggle": "Welches Todo möchtest du (ent-)abhaken?",
         "confirm_delete": "Möchtest du '{name}' wirklich löschen?",
         "confirm_all_delete": "Möchtest du wirklich alle Todolisten löschen?",
+        "confirm_all_delete_todos": "Möchtest du wirklich alle Todos löschen?",
         "continue": "1 - Fortfahren",
         "cancel": " - Abbrechen",
         "yes": "1 - Ja",
@@ -88,6 +89,7 @@ translations = {
         "todo_toggle": "Which todo would you like to (un)check?",
         "confirm_delete": "Do you really want to delete '{name}'?",
         "confirm_all_delete": "Do you really want to delete all todolists?",
+        "confirm_all_delete_todos": "Do you really want to delete all todos?",
         "continue": "1 - Continue",
         "cancel": " - Cancel",
         "yes": "1 - Yes",
@@ -366,7 +368,7 @@ while True:
         # 5 - Clear all todos
         elif choice == "5":
             if todos:
-                print(t("confirm_all_delete"))
+                print(t("confirm_all_delete_todos"))
                 print(t("continue"))
                 print("2" + t("cancel"))
                 confirm = input("> ").strip()
